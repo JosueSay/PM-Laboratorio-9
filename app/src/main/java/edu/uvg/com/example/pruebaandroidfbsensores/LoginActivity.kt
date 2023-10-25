@@ -36,12 +36,12 @@ class LoginActivity : ComponentActivity() {
 
     private fun loginUser(correo: String, password: String) {
         if (correo.isBlank() || password.isBlank()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Ingresa los datos completos", Toast.LENGTH_LONG).show()
             return
         }
 
         // Show a loading message (you might want to replace this with a real loading indicator in your Composable UI)
-        Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Cargando...", Toast.LENGTH_SHORT).show()
 
         // Query Firebase for a user with the matching email
         val query: Query = dbRef.orderByChild("correo").equalTo(correo)
@@ -61,16 +61,16 @@ class LoginActivity : ComponentActivity() {
                         }
                     }
                     // If we haven't returned yet, the password was wrong
-                    Toast.makeText(this@LoginActivity, "Incorrect password", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LoginActivity, "Contraseña incorrecta", Toast.LENGTH_LONG).show()
                 } else {
                     // User does not exist
-                    Toast.makeText(this@LoginActivity, "User with this email does not exist", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LoginActivity, "No existe usuario con el correo ", Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting data failed, log a message
-                Toast.makeText(this@LoginActivity, "Database error: ${databaseError.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginActivity, "Error de ingreso: ${databaseError.message}", Toast.LENGTH_LONG).show()
             }
         })
     }

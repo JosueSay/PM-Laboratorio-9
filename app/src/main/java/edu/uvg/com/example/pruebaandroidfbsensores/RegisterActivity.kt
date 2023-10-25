@@ -35,7 +35,7 @@ class RegisterActivity : ComponentActivity() {
         // For example:
         if (userUsuario.isEmpty() || userCorreo.isEmpty() || userPassword.isEmpty()) {
             // Show error
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Ingresa la información completa", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -45,7 +45,7 @@ class RegisterActivity : ComponentActivity() {
 
         dbRef.child(userId).setValue(usuario)
             .addOnCompleteListener {
-                Toast.makeText(this, "Data inserted successfully", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Usuario ingresado", Toast.LENGTH_LONG).show()
             }.addOnFailureListener { err ->
                 Toast.makeText(this, "Error ${err.message}", Toast.LENGTH_LONG).show()
             }
@@ -89,7 +89,7 @@ fun LoginScreen(onSave: (usuario: String, correo: String, password: String) -> U
         )
 
         Button(onClick = { onSave(usuario, correo, password)}) {
-            Text("Save Data")
+            Text("Guardar datos")
         }
     }
 }
