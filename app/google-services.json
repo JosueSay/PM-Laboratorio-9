@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "890230139475",
+    "project_id": "sensoresdemas",
+    "storage_bucket": "sensoresdemas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890230139475:android:c807314243fa7cd1cf34a6",
+        "android_client_info": {
+          "package_name": "edu.uvg.com.example.pruebaandroidfbsensores"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7sPHL9_vR45pie2_2wZyyuE60bJHbO5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
