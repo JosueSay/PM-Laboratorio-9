@@ -1,11 +1,14 @@
 package edu.uvg.com.example.galeriacompose
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -93,8 +96,8 @@ fun CameraHomeScreen() {
                 IconButton(
                     onClick = {
                         val executor = ContextCompat.getMainExecutor(context)
-                        tomarFoto(cameraController, executor) { uri ->
-                            imagenUri = uri  // Actualiza el estado con la URI de la imagen
+                        tomarFoto(cameraController, executor, context) { uri ->
+                            imagenUri = uri
                         }
                     }
                 ) {
@@ -158,7 +161,7 @@ fun CameraHomeScreen() {
                         onClick = {
                             // Acción para el segundo botón (tomar foto)
                             val executor = ContextCompat.getMainExecutor(context)
-                            tomarFoto(cameraController, executor) { uri ->
+                            tomarFoto(cameraController, executor, context) { uri ->
                                 imagenUri = uri
                             }
                         }
@@ -192,6 +195,7 @@ fun loadBitmapFromUri(uri: Uri, context: Context): Bitmap? {
 private fun tomarFoto(
     cameraController: LifecycleCameraController,
     executor: Executor,
+    context: Context,  // Agregamos un parámetro de tipo Context
     onFotoTomada: (Uri) -> Unit
 ) {
     val file = File.createTempFile("imagentest", ".jpg")
@@ -203,7 +207,28 @@ private fun tomarFoto(
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 outputFileResults.savedUri?.let {
-                    onFotoTomada(it)  // Invoca el callback con la URI de la imagen
+                    onFotoTomada(it)
+
+                    try {
+                        val contentValues = ContentValues().apply {
+                            put(MediaStore.Images.Media.DISPLAY_NAME, file.name)
+                            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                        }
+
+                        val contentResolver = context.contentResolver
+                        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+                        uri?.let {
+                            val outputStream = contentResolver.openOutputStream(it)
+                            outputStream?.use { stream ->
+                                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        println("Error al guardar la imagen en la galería: ${e.message}")
+                    }
                 }
             }
 
@@ -212,6 +237,7 @@ private fun tomarFoto(
             }
         })
 }
+
 
 @Composable
 fun VistaCamaraCompose(
