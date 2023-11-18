@@ -67,6 +67,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // navegacion
+    implementation ("androidx.navigation:navigation-compose:2.4.0-alpha06")
+
+
     // Permiso de la cámara
     implementation ("com.google.accompanist:accompanist-permissions:0.28.0")
     // Librerias para camara
