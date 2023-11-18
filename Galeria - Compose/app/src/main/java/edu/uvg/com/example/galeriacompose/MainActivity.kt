@@ -1,6 +1,7 @@
 package edu.uvg.com.example.galeriacompose
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -52,7 +53,6 @@ import edu.uvg.com.example.galeriacompose.ui.theme.FormasApp
 import edu.uvg.com.example.galeriacompose.ui.theme.FuentesApp
 
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +65,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun miPerfil_pantalla() {
-    var nombreUsuario = "Josué Say"
-    var correoUsuario = "say22801@correo.com"
+    var nombreUsuario = "Nombre usuario"
+    var correoUsuario = "usuario@correo.com"
 
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -146,6 +146,14 @@ fun fotoPerfil(context: Context, imageUri: Uri?) {
 // CAMBIAR IMAGEN
 @Composable
 fun cambiarImagen(pickImageLauncher: ManagedActivityResultLauncher<String, Uri?>) {
+    // Cambios de activities
+    val lanzador = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { resultado ->
+    }
+    val contexto = LocalContext.current
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -160,7 +168,13 @@ fun cambiarImagen(pickImageLauncher: ManagedActivityResultLauncher<String, Uri?>
             horizontalArrangement = Arrangement.Center
         ) {
 
-            IconButton(onClick = { /*ACCION*/ }) {
+            IconButton(onClick = {
+
+                val navegacion = Intent(contexto, LogicCam::class.java)
+                lanzador.launch(navegacion)
+
+
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_camara1),
                     contentDescription = "Icono de cámara",

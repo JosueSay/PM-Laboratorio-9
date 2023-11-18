@@ -66,4 +66,14 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Permiso de la cámara
+    implementation ("com.google.accompanist:accompanist-permissions:0.28.0")
+    // Librerias para camara
+    /**
+     * CAMERAX 1.3 no soporta JetpackCompose, solo xml
+     * */
+    implementation ("androidx.camera:camera-camera2:1.3.0")
+    implementation ("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
 }
