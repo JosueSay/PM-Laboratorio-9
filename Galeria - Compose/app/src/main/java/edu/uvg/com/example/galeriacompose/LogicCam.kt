@@ -50,7 +50,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.Executor
-import edu.uvg.com.example.galeriacompose.R
+
 class LogicCam : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
