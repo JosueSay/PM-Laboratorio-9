@@ -1,8 +1,10 @@
 package edu.uvg.com.example.galeriacompose
 
 import android.Manifest
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -186,7 +188,7 @@ fun loadBitmapFromUri(uri: Uri, context: Context): Bitmap? {
 private fun tomarFoto(
     cameraController: LifecycleCameraController,
     executor: Executor,
-    context: Context,  // Agregamos un parámetro de tipo Context
+    context: Context,
     onFotoTomada: (Uri) -> Unit
 ) {
     val file = File.createTempFile("imagentest", ".jpg")
@@ -217,6 +219,12 @@ private fun tomarFoto(
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                             }
                         }
+
+                        // Después de tomar la foto, incluye la URI como extra y finaliza la actividad
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("imagenUri", it)
+                        (context as Activity).setResult(Activity.RESULT_OK, resultIntent)
+                        (context as Activity).finish()
                     } catch (e: Exception) {
                         println("Error al guardar la imagen en la galería: ${e.message}")
                     }

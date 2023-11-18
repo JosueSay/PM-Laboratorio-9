@@ -1,5 +1,6 @@
 package edu.uvg.com.example.galeriacompose
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -9,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -77,6 +79,20 @@ fun miPerfil_pantalla() {
         imageUri = uri
     }
 
+    val resultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val imagenUri = data?.getParcelableExtra<Uri>("imagenUri")
+
+            // Actualiza el estado de la imageUri cuando se toma la foto con la cámara
+            if (imagenUri != null) {
+                imageUri = imagenUri
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -84,7 +100,7 @@ fun miPerfil_pantalla() {
     ) {
         tituloPerfil()
         fotoPerfil(context, imageUri)
-        cambiarImagen(pickImageLauncher)
+        cambiarImagen(resultLauncher, pickImageLauncher)
         infoUsuario(nombreUsuario = nombreUsuario, correoUsuario = correoUsuario)
     }
 }
@@ -145,14 +161,11 @@ fun fotoPerfil(context: Context, imageUri: Uri?) {
 
 // CAMBIAR IMAGEN
 @Composable
-fun cambiarImagen(pickImageLauncher: ManagedActivityResultLauncher<String, Uri?>) {
-    // Cambios de activities
-    val lanzador = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { resultado ->
-    }
+fun cambiarImagen(
+    resultLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    pickImageLauncher: ManagedActivityResultLauncher<String, Uri?>
+)  {
     val contexto = LocalContext.current
-
 
     Column(
         modifier = Modifier
@@ -169,11 +182,8 @@ fun cambiarImagen(pickImageLauncher: ManagedActivityResultLauncher<String, Uri?>
         ) {
 
             IconButton(onClick = {
-
-                val navegacion = Intent(contexto, LogicCam::class.java)
-                lanzador.launch(navegacion)
-
-
+                val intent = Intent(contexto, LogicCam::class.java)
+                resultLauncher.launch(intent)
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_camara1),
