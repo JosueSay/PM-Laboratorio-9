@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.*
 
 class MainActivity : AppCompatActivity() {
-    
+
 
     val pickMedia = registerForActivityResult(PickVisualMedia()){
         uri->
