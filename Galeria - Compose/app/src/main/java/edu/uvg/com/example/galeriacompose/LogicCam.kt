@@ -19,7 +19,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -41,7 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -53,7 +51,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.Executor
 
 class LogicCam : ComponentActivity() {
@@ -170,18 +167,6 @@ fun CameraHomeScreen() {
         } else {
             Text(text = "Permiso NO Concedido", modifier = Modifier.padding(it))
         }
-    }
-}
-
-// Función para cargar un bitmap desde una URI
-fun loadBitmapFromUri(uri: Uri, context: Context): Bitmap? {
-    return try {
-        context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            BitmapFactory.decodeStream(inputStream)
-        }
-    } catch (e: IOException) {
-        // Manejar excepción
-        null
     }
 }
 
