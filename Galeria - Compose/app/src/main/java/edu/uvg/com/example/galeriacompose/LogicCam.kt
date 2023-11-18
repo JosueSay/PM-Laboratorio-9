@@ -117,7 +117,6 @@ fun CameraHomeScreen() {
             VistaCamaraCompose(cameraController, lifecycle, modifier = Modifier.padding(it))
 
 
-            }
             // Contenedor para los botones
             Box(
                 modifier = Modifier
