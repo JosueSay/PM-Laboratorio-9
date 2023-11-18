@@ -116,15 +116,7 @@ fun CameraHomeScreen() {
             Text(text = "Permiso Concedido", modifier = Modifier.padding(it))
             VistaCamaraCompose(cameraController, lifecycle, modifier = Modifier.padding(it))
 
-            // Muestra la imagen si imagenUri no es null
-            imagenUri?.let { uri ->
-                // Cargar y mostrar la imagen
-                val bitmap = loadBitmapFromUri(uri, context)
-                if (bitmap != null) {
-                    Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Foto capturada")
-                } else {
-                    // Manejo opcional de errores
-                }
+
             }
             // Contenedor para los botones
             Box(
