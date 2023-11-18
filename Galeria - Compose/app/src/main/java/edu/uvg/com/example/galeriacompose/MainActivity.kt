@@ -1,9 +1,11 @@
 package edu.uvg.com.example.galeriacompose
 
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -64,6 +65,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun miPerfil_pantalla() {
+    var nombreUsuario = "Josué Say"
+    var correoUsuario = "say22801@correo.com"
+
+
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
     val pickImageLauncher = rememberLauncherForActivityResult(
@@ -75,33 +80,14 @@ fun miPerfil_pantalla() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = ColoresApp.colorFondo),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .background(color = ColoresApp.colorFondo)
     ) {
-        imageUri?.let {
-            val imageBitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(it))
-            Image(
-                bitmap = imageBitmap.asImageBitmap(),
-                contentDescription = "Selected Image",
-                modifier = Modifier.size(150.dp).clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-        } ?: Image(
-            painter = painterResource(id = R.drawable.icon_perfil2),
-            contentDescription = "Default Image",
-            modifier = Modifier.size(150.dp).clip(CircleShape)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { pickImageLauncher.launch("image/*") }) {
-            Text("Editar Imagen")
-        }
+        tituloPerfil()
+        fotoPerfil(context, imageUri)
+        cambiarImagen(pickImageLauncher)
+        infoUsuario(nombreUsuario = nombreUsuario, correoUsuario = correoUsuario)
     }
 }
-
-
 
 // TITULO APP
 @Composable
@@ -127,7 +113,7 @@ fun tituloPerfil() {
 
 // FOTO PERFIL
 @Composable
-fun fotoPerfil() {
+fun fotoPerfil(context: Context, imageUri: Uri?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,7 +121,18 @@ fun fotoPerfil() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(
+        imageUri?.let {
+            val imageBitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(it))
+            Image(
+                bitmap = imageBitmap.asImageBitmap(),
+                contentDescription = "Foto de perfil seleccionada",
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .background(ColoresApp.colorPerfil),
+                contentScale = ContentScale.Crop
+            )
+        } ?: Image(
             painter = painterResource(id = R.drawable.icon_perfil2),
             contentDescription = "Foto de perfil",
             modifier = Modifier
@@ -148,7 +145,7 @@ fun fotoPerfil() {
 
 // CAMBIAR IMAGEN
 @Composable
-fun cambiarImagen() {
+fun cambiarImagen(pickImageLauncher: ManagedActivityResultLauncher<String, Uri?>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -174,7 +171,9 @@ fun cambiarImagen() {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { /* Acción de editar perfil */ },
+                onClick = {
+                    pickImageLauncher.launch("image/*")
+                          },
                 colors = ButtonDefaults.buttonColors(ColoresApp.colorFuerte)
             ) {
                 Text(
@@ -233,9 +232,9 @@ fun infoUsuario(nombreUsuario: String, correoUsuario: String) {
         Divider(color = androidx.compose.ui.graphics.Color.Gray, thickness = 1.dp)
 
         // "Guardar Cambios"
-        Spacer(modifier = Modifier.height(90.dp)) // Espacio antes de la nueva sección
+        Spacer(modifier = Modifier.height(90.dp))
         Button(
-            onClick = {},
+            onClick = {/***/},
             colors = ButtonDefaults.buttonColors(ColoresApp.colorFuerte),
             shape = FormasApp.bordes
         ) {
